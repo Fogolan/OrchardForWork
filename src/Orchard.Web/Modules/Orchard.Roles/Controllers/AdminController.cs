@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Orchard.ContentManagement;
 using Orchard.Localization;
 using Orchard.Logging;
 using Orchard.Mvc;
@@ -17,15 +18,18 @@ namespace Orchard.Roles.Controllers {
     public class AdminController : Controller {
         private readonly IRoleService _roleService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly WorkContext _workContext;
 
         public AdminController(
             IOrchardServices services,
             IRoleService roleService,
             INotifier notifier,
-            IAuthorizationService authorizationService) {
+            IAuthorizationService authorizationService,
+            WorkContext workContext) {
             Services = services;
             _roleService = roleService;
             _authorizationService = authorizationService;
+            _workContext = workContext;
 
             T = NullLocalizer.Instance;
             Logger = NullLogger.Instance;
@@ -38,8 +42,12 @@ namespace Orchard.Roles.Controllers {
         public ActionResult Index() {
             if (!Services.Authorizer.Authorize(Permissions.ManageRoles, T("Not authorized to manage roles")))
                 return new HttpUnauthorizedResult();
-
-            var model = new RolesIndexViewModel { Rows = _roleService.GetRoles().OrderBy(r => r.Name).ToList() };
+            ///////Changes
+            var useRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
+            var model = new RolesIndexViewModel { Rows = _roleService.GetRoles().OrderBy(r => r.Name).ToList() }; 
+            if (!Services.Authorizer.Authorize(Permissions.SuperUserPermission)) {
+                model = new RolesIndexViewModel { Rows = _roleService.GetRoles().Where(r => useRoles.Any(n => n == r.Name)).OrderBy(r => r.Name).ToList() };
+            }
 
             return View(model);
         }
@@ -102,7 +110,6 @@ namespace Orchard.Roles.Controllers {
         public ActionResult Edit(int id) {
             if (!Services.Authorizer.Authorize(Permissions.ManageRoles, T("Not authorized to manage roles")))
                 return new HttpUnauthorizedResult();
-
             var role = _roleService.GetRole(id);
             if (role == null) {
                 return HttpNotFound();

@@ -19,6 +19,7 @@ namespace Orchard.Roles.Drivers {
         private readonly IAuthenticationService _authenticationService;
         private readonly IAuthorizationService _authorizationService;
         private readonly IRoleEventHandler _roleEventHandlers;
+        private readonly WorkContext _workContext;
         private const string TemplateName = "Parts/Roles.UserRoles";
 
         public UserRolesPartDriver(
@@ -27,7 +28,8 @@ namespace Orchard.Roles.Drivers {
             INotifier notifier,
             IAuthenticationService authenticationService,
             IAuthorizationService authorizationService, 
-            IRoleEventHandler roleEventHandlers) {
+            IRoleEventHandler roleEventHandlers,
+            WorkContext workContext) {
 
             _userRolesRepository = userRolesRepository;
             _roleService = roleService;
@@ -35,6 +37,7 @@ namespace Orchard.Roles.Drivers {
             _authenticationService = authenticationService;
             _authorizationService = authorizationService;
             _roleEventHandlers = roleEventHandlers;
+            _workContext = workContext;
             T = NullLocalizer.Instance;
         }
 
@@ -50,13 +53,14 @@ namespace Orchard.Roles.Drivers {
             // don't show editor without apply roles permission
             if (!_authorizationService.TryCheckAccess(Permissions.AssignRoles, _authenticationService.GetAuthenticatedUser(), userRolesPart))
                 return null;
-
+            ////Changes
+            var userRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
             return ContentShape("Parts_Roles_UserRoles_Edit",
                     () => {
                        var roles =_roleService.GetRoles().Select(x => new UserRoleEntry {
                                                                           RoleId = x.Id,
                                                                           Name = x.Name,
-                                                                          Granted = userRolesPart.Roles.Contains(x.Name)});
+                                                                          Granted = userRolesPart.Roles.Contains(x.Name)}).Where(r => userRoles.Any(n => n == r.Name));
                        var model = new UserRolesViewModel {
                            User = userRolesPart.As<IUser>(),
                            UserRoles = userRolesPart,
@@ -70,7 +74,7 @@ namespace Orchard.Roles.Drivers {
             // don't apply editor without apply roles permission
             if (!_authorizationService.TryCheckAccess(Permissions.AssignRoles, _authenticationService.GetAuthenticatedUser(), userRolesPart))
                 return null;
-
+            
             var model = BuildEditorViewModel(userRolesPart);
             if (updater.TryUpdateModel(model, Prefix, null, null)) {
                 var currentUserRoleRecords = _userRolesRepository.Fetch(x => x.UserId == model.User.Id).ToArray();
