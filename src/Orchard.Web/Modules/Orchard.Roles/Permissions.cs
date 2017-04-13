@@ -24,6 +24,5 @@ namespace Orchard.Roles {
                 },
             };
         }
-
     }
 }

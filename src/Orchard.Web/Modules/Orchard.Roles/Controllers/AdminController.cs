@@ -12,6 +12,7 @@ using Orchard.Roles.Services;
 using Orchard.Roles.ViewModels;
 using Orchard.Security;
 using Orchard.UI.Notify;
+using Orchard.Users.Models;
 
 namespace Orchard.Roles.Controllers {
     [ValidateInput(false)]
@@ -43,10 +44,11 @@ namespace Orchard.Roles.Controllers {
             if (!Services.Authorizer.Authorize(Permissions.ManageRoles, T("Not authorized to manage roles")))
                 return new HttpUnauthorizedResult();
             ///////Changes
+            var userRoles = UserAllowedRoles._rolesAllowed.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             var useRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
             var model = new RolesIndexViewModel { Rows = _roleService.GetRoles().OrderBy(r => r.Name).ToList() }; 
             if (!Services.Authorizer.Authorize(Permissions.SuperUserPermission)) {
-                model = new RolesIndexViewModel { Rows = _roleService.GetRoles().Where(r => useRoles.Any(n => n == r.Name)).OrderBy(r => r.Name).ToList() };
+                model = new RolesIndexViewModel { Rows = _roleService.GetRoles().Where(r => userRoles.Any(n => n == r.Name)).OrderBy(r => r.Name).ToList() };
             }
 
             return View(model);

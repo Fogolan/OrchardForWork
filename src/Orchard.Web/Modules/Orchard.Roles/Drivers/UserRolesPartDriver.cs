@@ -10,6 +10,7 @@ using Orchard.Roles.Services;
 using Orchard.Roles.ViewModels;
 using Orchard.Security;
 using Orchard.UI.Notify;
+using Orchard.Users.Models;
 
 namespace Orchard.Roles.Drivers {
     public class UserRolesPartDriver : ContentPartDriver<UserRolesPart> {
@@ -54,7 +55,7 @@ namespace Orchard.Roles.Drivers {
             if (!_authorizationService.TryCheckAccess(Permissions.AssignRoles, _authenticationService.GetAuthenticatedUser(), userRolesPart))
                 return null;
             ////Changes
-            var userRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
+            var userRoles = UserAllowedRoles._rolesAllowed.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             return ContentShape("Parts_Roles_UserRoles_Edit",
                     () => {
                        var roles =_roleService.GetRoles().Select(x => new UserRoleEntry {
