@@ -113,6 +113,8 @@
     <Compile Include="Events\UserRoleContext.cs" />
     <Compile Include="Forms\SelectRolesForms.cs" />
     <Compile Include="Forms\UserTaskForms.cs" />
+    <Compile Include="Models\AllowedRoleRecord.cs" />
+    <Compile Include="Models\RoleAllowedRolesRecord.cs" />
     <Compile Include="Recipes\Builders\RolesStep.cs" />
     <Compile Include="Recipes\Executors\RolesStep.cs" />
     <Compile Include="Migrations.cs" />

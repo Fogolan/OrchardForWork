@@ -50,5 +50,21 @@ namespace Orchard.Roles {
 
             return 2;
         }
+
+        public int UpdateFrom2() {
+            SchemaBuilder.CreateTable("AllowedRoleRecord", t => t
+                .Column<int>("Id", c => c.PrimaryKey().Identity())
+                .Column<string>("AllowedRole", c => c.NotNull())
+            );
+
+            SchemaBuilder.CreateTable("RoleAllowedRolesRecord", t => t
+                .Column<int>("Id", c => c.PrimaryKey().Identity())
+            );
+
+            SchemaBuilder.CreateForeignKey("AllowedRoles_Role", "RoleAllowedRolesRecord", new[] {"Role_Id"}, "RoleRecord", new[] {"Id"});
+            SchemaBuilder.CreateForeignKey("AllowedRoles_AllowedRole", "RoleAllowedRolesRecord", new[] { "AllowedRole_Id" }, "AllowedRoleRecord", new[] { "Id" });
+
+            return 3;
+        }
     }
 }
