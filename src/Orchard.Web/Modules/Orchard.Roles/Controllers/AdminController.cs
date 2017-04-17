@@ -44,12 +44,10 @@ namespace Orchard.Roles.Controllers {
             if (!Services.Authorizer.Authorize(Permissions.ManageRoles, T("Not authorized to manage roles")))
                 return new HttpUnauthorizedResult();
             ///////Changes
-            var userRoles = UserAllowedRoles._rolesAllowed.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             var useRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
-            var model = new RolesIndexViewModel { Rows = _roleService.GetRoles().OrderBy(r => r.Name).ToList() }; 
-            if (!Services.Authorizer.Authorize(Permissions.SuperUserPermission)) {
-                model = new RolesIndexViewModel { Rows = _roleService.GetRoles().Where(r => userRoles.Any(n => n == r.Name)).OrderBy(r => r.Name).ToList() };
-            }
+            var userRoles = UserAllowedRoles._roleAllowed[useRoles.First()];
+            var allRoles = _roleService.GetRoles().ToList();
+            var model = new RolesIndexViewModel { Rows = _roleService.GetRoles()/*.Where(r => userRoles.Any(n => n == r.Name))*/.OrderBy(r => r.Name).ToList() };
 
             return View(model);
         }
@@ -84,7 +82,7 @@ namespace Orchard.Roles.Controllers {
             var viewModel = new RoleCreateViewModel();
             TryUpdateModel(viewModel);
 
-            if(String.IsNullOrEmpty(viewModel.Name)) {
+            if(string.IsNullOrEmpty(viewModel.Name)) {
                 ModelState.AddModelError("Name", T("Role name can't be empty"));
             }
 
@@ -141,7 +139,7 @@ namespace Orchard.Roles.Controllers {
             var viewModel = new RoleEditViewModel();
             TryUpdateModel(viewModel);
 
-            if (String.IsNullOrEmpty(viewModel.Name)) {
+            if (string.IsNullOrEmpty(viewModel.Name)) {
                 ModelState.AddModelError("Name", T("Role name can't be empty"));
             }
 

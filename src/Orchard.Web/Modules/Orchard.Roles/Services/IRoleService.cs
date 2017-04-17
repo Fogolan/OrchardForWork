@@ -9,6 +9,7 @@ namespace Orchard.Roles.Services {
         RoleRecord GetRoleByName(string name);
         void CreateRole(string roleName);
         void CreatePermissionForRole(string roleName, string permissionName);
+        void CreateAllowedRole(string allowedRoleName, string roleName);
         void UpdateRole(int id, string roleName, IEnumerable<string> rolePermissions);
         void DeleteRole(int id);
         IDictionary<string, IEnumerable<Permission>> GetInstalledPermissions();

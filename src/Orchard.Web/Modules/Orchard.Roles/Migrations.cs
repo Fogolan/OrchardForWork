@@ -1,4 +1,5 @@
-﻿using Orchard.Data.Migration;
+﻿using System.Linq;
+using Orchard.Data.Migration;
 using Orchard.Roles.Services;
 
 namespace Orchard.Roles {
@@ -52,19 +53,45 @@ namespace Orchard.Roles {
         }
 
         public int UpdateFrom2() {
-            SchemaBuilder.CreateTable("AllowedRoleRecord", t => t
-                .Column<int>("Id", c => c.PrimaryKey().Identity())
-                .Column<string>("AllowedRole", c => c.NotNull())
-            );
-
-            SchemaBuilder.CreateTable("RoleAllowedRolesRecord", t => t
-                .Column<int>("Id", c => c.PrimaryKey().Identity())
-            );
-
-            SchemaBuilder.CreateForeignKey("AllowedRoles_Role", "RoleAllowedRolesRecord", new[] {"Role_Id"}, "RoleRecord", new[] {"Id"});
-            SchemaBuilder.CreateForeignKey("AllowedRoles_AllowedRole", "RoleAllowedRolesRecord", new[] { "AllowedRole_Id" }, "AllowedRoleRecord", new[] { "Id" });
-
+            _roleService.CreateRole("Testing");
             return 3;
+        }
+
+        public int UpdateFrom3() {
+            SchemaBuilder.CreateTable("AllowedRoleRecord",
+                table => table
+                    .Column<int>("Id", column => column.PrimaryKey().Identity())
+                    .Column<string>("AllowedRole")
+            );
+            SchemaBuilder.CreateTable("RoleAllowedRolesRecord",
+                table => table
+                    .Column<int>("Id", column => column.PrimaryKey().Identity())
+                    .Column<int>("Role_id")
+                    .Column<int>("AllowedRole_id")
+                    .Column<int>("RoleRecord_Id")
+            );
+
+            return 4;
+        }
+
+        public int UpdateFrom4() {
+            _roleService.CreateRole("MyRole");
+            _roleService.CreateRole("HisRole");
+            _roleService.CreateRole("YourRole");
+            _roleService.CreateRole("HiddenRole");
+
+            _roleService.CreatePermissionForRole("MyRole", "AccessAdminPanel");
+            _roleService.CreatePermissionForRole("MyRole", "ManageUsers");
+            _roleService.CreatePermissionForRole("MyRole", "ManageRoles");
+            
+            _roleService.CreateAllowedRole("MyRole", "HisRole");
+            _roleService.CreateAllowedRole("MyRole", "YourRole");
+            _roleService.CreateAllowedRole("MyRole", "MyRole");
+
+            foreach (var roleRecord in _roleService.GetRoles().ToList()) {
+                _roleService.CreateAllowedRole("Administrator", roleRecord.Name);
+            }
+            return 5;
         }
     }
 }

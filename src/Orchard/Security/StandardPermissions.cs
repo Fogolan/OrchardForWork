@@ -66,6 +66,10 @@ namespace Orchard.Security {
                     Name = "Contributor",
                     Permissions = new[] {AccessAdminPanel}
                 },
+                new PermissionStereotype {
+                    Name = "IsItRole?",
+                    Permissions = new[] {AccessFrontEnd, SiteOwner}
+                }
             };
         }
 

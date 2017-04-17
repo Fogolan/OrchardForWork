@@ -193,10 +193,7 @@ namespace Orchard.Users.Services {
                 return null;
 
             var user = _membershipService.GetUser(username);
-            if (user == null)
-                return null;
-
-            return user;
+            return user ?? null;
         }
 
         public bool PasswordMeetsPolicies(string password, out IDictionary<string, LocalizedString> validationErrors) {

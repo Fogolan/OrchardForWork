@@ -16,6 +16,7 @@ namespace Orchard.Roles.Services {
         private readonly IRepository<RoleRecord> _roleRepository;
         private readonly IRepository<PermissionRecord> _permissionRepository;
         private readonly IRepository<UserRolesPartRecord> _userRolesRepository;
+        private readonly IRepository<AllowedRoleRecord> _allowedRolesRepository;
         private readonly IEnumerable<IPermissionProvider> _permissionProviders;
         private readonly ICacheManager _cacheManager;
         private readonly ISignals _signals;
@@ -28,7 +29,7 @@ namespace Orchard.Roles.Services {
             IEnumerable<IPermissionProvider> permissionProviders,
             ICacheManager cacheManager,
             ISignals signals, 
-            IRoleEventHandler roleEventHandlers) {
+            IRoleEventHandler roleEventHandlers, IRepository<AllowedRoleRecord> allowedRolesRepository) {
 
             _roleRepository = roleRepository;
             _permissionRepository = permissionRepository;
@@ -37,6 +38,7 @@ namespace Orchard.Roles.Services {
             _cacheManager = cacheManager;
             _signals = signals;
             _roleEventHandlers = roleEventHandlers;
+            _allowedRolesRepository = allowedRolesRepository;
             Logger = NullLogger.Instance;
             T = NullLocalizer.Instance;
         }
@@ -64,6 +66,23 @@ namespace Orchard.Roles.Services {
             var roleRecord = new RoleRecord {Name = roleName};
             _roleRepository.Create(roleRecord);
             _roleEventHandlers.Created(new RoleCreatedContext { Role = roleRecord });
+            TriggerSignal();
+        }
+
+        public void AddAllowedRoles(string roleName, IList<string> allowedRoles) {
+            
+        }
+        
+        public void CreateAllowedRole(string roleName, string allowedRoleName) {
+            if (GetRoleByName(allowedRoleName) == null)
+                return;
+            if (_allowedRolesRepository.Get(x => x.AllowedRole == allowedRoleName) == null) {
+                _allowedRolesRepository.Create( new AllowedRoleRecord {
+                        AllowedRole = allowedRoleName
+                    });}
+            RoleRecord roleRecord = GetRoleByName(roleName);
+            AllowedRoleRecord allowedRoleRecord = _allowedRolesRepository.Get(x => x.AllowedRole == allowedRoleName);
+            roleRecord.AllowedRoles.Add(new RoleAllowedRolesRecord { AllowedRole = allowedRoleRecord, Role = roleRecord});
             TriggerSignal();
         }
 

@@ -1,8 +1,9 @@
 ﻿using Orchard.Localization;
-using Orchard.Security;
 using Orchard.UI.Navigation;
+using Orchard.Security.Permissions;
 
-namespace Orchard.Users {
+namespace Orchard.Users
+{
     public class AdminMenu : INavigationProvider {
         public Localizer T { get; set; }
         public string MenuName { get { return "admin"; } }

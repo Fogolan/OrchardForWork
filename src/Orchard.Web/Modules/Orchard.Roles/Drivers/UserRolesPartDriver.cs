@@ -55,7 +55,8 @@ namespace Orchard.Roles.Drivers {
             if (!_authorizationService.TryCheckAccess(Permissions.AssignRoles, _authenticationService.GetAuthenticatedUser(), userRolesPart))
                 return null;
             ////Changes
-            var userRoles = UserAllowedRoles._rolesAllowed.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var useRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
+            var userRoles = UserAllowedRoles._roleAllowed[useRoles[0]];
             return ContentShape("Parts_Roles_UserRoles_Edit",
                     () => {
                        var roles =_roleService.GetRoles().Select(x => new UserRoleEntry {

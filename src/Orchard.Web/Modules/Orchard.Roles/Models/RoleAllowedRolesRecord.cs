@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using Orchard.Data.Conventions;
 
 namespace Orchard.Roles.Models
 {
@@ -9,10 +7,6 @@ namespace Orchard.Roles.Models
     {
         public virtual int Id { get; set; }
         public virtual RoleRecord Role { get; set; }
-        public virtual IList<AllowedRoleRecord> AllowedRoles { get; set; }
-
-        public RoleAllowedRolesRecord() {
-            AllowedRoles = new List<AllowedRoleRecord>();
-        }
+        public virtual AllowedRoleRecord AllowedRole { get; set; }
     }
 }
