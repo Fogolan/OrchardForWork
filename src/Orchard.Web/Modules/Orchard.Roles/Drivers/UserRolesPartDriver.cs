@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Orchard.ContentManagement.Drivers;
 using Orchard.Data;
@@ -55,14 +56,14 @@ namespace Orchard.Roles.Drivers {
             if (!_authorizationService.TryCheckAccess(Permissions.AssignRoles, _authenticationService.GetAuthenticatedUser(), userRolesPart))
                 return null;
             ////Changes
-            var useRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
-            var userRoles = UserAllowedRoles._roleAllowed[useRoles[0]];
+            var userRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
+            IList<string> allowedRoles = userRoles.SelectMany(userRole => _roleService.GetAllowedRolesForRoleByName(userRole)).ToList();
             return ContentShape("Parts_Roles_UserRoles_Edit",
                     () => {
                        var roles =_roleService.GetRoles().Select(x => new UserRoleEntry {
                                                                           RoleId = x.Id,
                                                                           Name = x.Name,
-                                                                          Granted = userRolesPart.Roles.Contains(x.Name)}).Where(r => userRoles.Any(n => n == r.Name));
+                                                                          Granted = userRolesPart.Roles.Contains(x.Name)}).Where(r => allowedRoles.Any(n => n == r.Name));
                        var model = new UserRolesViewModel {
                            User = userRolesPart.As<IUser>(),
                            UserRoles = userRolesPart,

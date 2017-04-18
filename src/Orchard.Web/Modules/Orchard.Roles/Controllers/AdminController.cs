@@ -43,11 +43,9 @@ namespace Orchard.Roles.Controllers {
         public ActionResult Index() {
             if (!Services.Authorizer.Authorize(Permissions.ManageRoles, T("Not authorized to manage roles")))
                 return new HttpUnauthorizedResult();
-            ///////Changes
-            var useRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
-            var userRoles = UserAllowedRoles._roleAllowed[useRoles.First()];
-            var allRoles = _roleService.GetRoles().ToList();
-            var model = new RolesIndexViewModel { Rows = _roleService.GetRoles()/*.Where(r => userRoles.Any(n => n == r.Name))*/.OrderBy(r => r.Name).ToList() };
+            var userRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
+            IList<string> allowedRoles = userRoles.SelectMany(userRole => _roleService.GetAllowedRolesForRoleByName(userRole)).ToList();
+            var model = new RolesIndexViewModel { Rows = _roleService.GetRoles().Where(r => allowedRoles.Any(n => n == r.Name)).OrderBy(r => r.Name).ToList() };
 
             return View(model);
         }

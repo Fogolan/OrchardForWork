@@ -83,13 +83,19 @@ namespace Orchard.Roles {
             _roleService.CreatePermissionForRole("MyRole", "AccessAdminPanel");
             _roleService.CreatePermissionForRole("MyRole", "ManageUsers");
             _roleService.CreatePermissionForRole("MyRole", "ManageRoles");
+            _roleService.CreatePermissionForRole("MyRole", "AssignRoles");
+            _roleService.CreatePermissionForRole("MyRole", "PublishContent");
+            _roleService.CreatePermissionForRole("MyRole", "SecondTestPermission");
             
-            _roleService.CreateAllowedRole("MyRole", "HisRole");
-            _roleService.CreateAllowedRole("MyRole", "YourRole");
-            _roleService.CreateAllowedRole("MyRole", "MyRole");
+            _roleService.CreateAllowedRoleForRole("MyRole", "HisRole");
+            _roleService.CreateAllowedRoleForRole("MyRole", "YourRole");
+            _roleService.CreateAllowedRoleForRole("MyRole", "MyRole");
+
+            _roleService.CreatePermissionForRole("HisRole", "AccessAdminPanel");
+            _roleService.CreatePermissionForRole("HisRole", "TestPermission");
 
             foreach (var roleRecord in _roleService.GetRoles().ToList()) {
-                _roleService.CreateAllowedRole("Administrator", roleRecord.Name);
+                _roleService.CreateAllowedRoleForRole("Administrator", roleRecord.Name);
             }
             return 5;
         }

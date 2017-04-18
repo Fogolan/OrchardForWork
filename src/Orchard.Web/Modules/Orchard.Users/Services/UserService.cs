@@ -32,11 +32,11 @@ namespace Orchard.Users.Services {
         private readonly ISiteService _siteService;
 
         public UserService(
-            IContentManager contentManager, 
-            IMembershipService membershipService, 
-            IClock clock, 
-            IMessageService messageService, 
-            ShellSettings shellSettings, 
+            IContentManager contentManager,
+            IMembershipService membershipService,
+            IClock clock,
+            IMessageService messageService,
+            ShellSettings shellSettings,
             IEncryptionService encryptionService,
             IShapeFactory shapeFactory,
             IShapeDisplay shapeDisplay,

@@ -10,5 +10,10 @@ namespace DashboardManaging.Controllers
         {
             return View();
         }
+
+        [Themed]
+        public ActionResult SecondItemIndex() {
+            return View();
+        }
     }
 }

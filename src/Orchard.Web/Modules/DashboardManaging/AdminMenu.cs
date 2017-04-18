@@ -22,6 +22,10 @@ namespace DashboardManaging
                     menu => menu.Action("Index", "DashboardAdmin", new { area = "DashboardManaging" })
                         .Add(T("Test menu Item"), "1.0", item => item.Action("Index", "DashboardAdmin", new { area = "DashboardManaging" })
                             .LocalNav().Permission(Permissions.TestPermission)));
+                builder.Add(T("Second Test menu Item"), "3",
+                    menu => menu.Action("SecondItemIndex", "DashboardAdmin", new {area = "DashboardManaging"})
+                        .Add(T("Second Test menu Item"), "1.0", item => item.Action("SecondItemIndex", "DashboardAdmin", new { area = "DashboardManaging" })
+                            .LocalNav().Permission(Permissions.SecondTestPermission)));
         }
     }
 }

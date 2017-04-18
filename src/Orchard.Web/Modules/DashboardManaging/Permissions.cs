@@ -7,14 +7,14 @@ namespace DashboardManaging
     public class Permissions : IPermissionProvider
     {
         public static readonly Permission TestPermission = new Permission { Description = "Visible custom menu Item", Name = "TestPermission" };
-        public static readonly Permission UnvisiblePermission = new Permission {Description = "Allow to assign hidden roles", Name = "UnvisiblePermission"};
+        public static readonly Permission SecondTestPermission = new Permission {Description = "Visible second custom menu Item", Name = "SecondTestPermission"};
 
         public virtual Feature Feature { get; set; }
 
         public IEnumerable<Permission> GetPermissions()
         {
             return new[] {
-                TestPermission,
+                TestPermission, SecondTestPermission
             };
         }
 
@@ -23,7 +23,7 @@ namespace DashboardManaging
             return new[] {
                 new PermissionStereotype {
                     Name = "Administrator",
-                    Permissions = new[] {TestPermission, UnvisiblePermission}
+                    Permissions = new[] {TestPermission, SecondTestPermission}
                 },
             };
         }
