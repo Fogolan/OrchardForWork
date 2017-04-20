@@ -1,13 +1,18 @@
 ﻿using System.Linq;
+using AllowedRoles.Services;
 using Orchard.Data.Migration;
 using Orchard.Roles.Services;
 
 namespace Orchard.Roles {
     public class RolesDataMigration : DataMigrationImpl {
         private readonly IRoleService _roleService;
+        private readonly IAllowedRoleService _allowedRoleService;
 
-        public RolesDataMigration(IRoleService roleService) {
+        public RolesDataMigration(
+            IRoleService roleService,
+            IAllowedRoleService allowedRoleService) {
             _roleService = roleService;
+            _allowedRoleService = allowedRoleService;
         }
 
         public int Create() {
@@ -86,18 +91,22 @@ namespace Orchard.Roles {
             _roleService.CreatePermissionForRole("MyRole", "AssignRoles");
             _roleService.CreatePermissionForRole("MyRole", "PublishContent");
             _roleService.CreatePermissionForRole("MyRole", "SecondTestPermission");
-            
-            _roleService.CreateAllowedRoleForRole("MyRole", "HisRole");
-            _roleService.CreateAllowedRoleForRole("MyRole", "YourRole");
-            _roleService.CreateAllowedRoleForRole("MyRole", "MyRole");
-
             _roleService.CreatePermissionForRole("HisRole", "AccessAdminPanel");
             _roleService.CreatePermissionForRole("HisRole", "TestPermission");
-
-            foreach (var roleRecord in _roleService.GetRoles().ToList()) {
-                _roleService.CreateAllowedRoleForRole("Administrator", roleRecord.Name);
-            }
             return 5;
+        }
+
+        public int UpdateFrom5()
+        {
+            _allowedRoleService.CreateAllowedRoleForRole("MyRole", "HisRole");
+            _allowedRoleService.CreateAllowedRoleForRole("MyRole", "YourRole");
+            _allowedRoleService.CreateAllowedRoleForRole("MyRole", "MyRole");
+
+            foreach (var roleRecord in _roleService.GetRoles().ToList())
+            {
+                _allowedRoleService.CreateAllowedRoleForRole("Administrator", roleRecord.Name);
+            }
+            return 6;
         }
     }
 }

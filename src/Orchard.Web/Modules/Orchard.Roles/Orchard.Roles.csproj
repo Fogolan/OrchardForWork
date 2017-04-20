@@ -162,6 +162,10 @@
       <Name>Orchard.Core</Name>
       <Private>false</Private>
     </ProjectReference>
+    <ProjectReference Include="..\AllowedRoles\AllowedRoles.csproj">
+      <Project>{70846ba5-7385-4419-b11f-09b42f8e80e5}</Project>
+      <Name>AllowedRoles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Orchard.Forms\Orchard.Forms.csproj">
       <Project>{642a49d7-8752-4177-80d6-bfbbcfad3de0}</Project>
       <Name>Orchard.Forms</Name>

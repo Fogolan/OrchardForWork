@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AllowedRoles.Services;
 using Orchard.ContentManagement.Drivers;
 using Orchard.Data;
 using Orchard.ContentManagement;
@@ -11,12 +12,12 @@ using Orchard.Roles.Services;
 using Orchard.Roles.ViewModels;
 using Orchard.Security;
 using Orchard.UI.Notify;
-using Orchard.Users.Models;
 
 namespace Orchard.Roles.Drivers {
     public class UserRolesPartDriver : ContentPartDriver<UserRolesPart> {
         private readonly IRepository<UserRolesPartRecord> _userRolesRepository;
         private readonly IRoleService _roleService;
+        private readonly IAllowedRoleService _allowedRoleService;
         private readonly INotifier _notifier;
         private readonly IAuthenticationService _authenticationService;
         private readonly IAuthorizationService _authorizationService;
@@ -31,7 +32,8 @@ namespace Orchard.Roles.Drivers {
             IAuthenticationService authenticationService,
             IAuthorizationService authorizationService, 
             IRoleEventHandler roleEventHandlers,
-            WorkContext workContext) {
+            WorkContext workContext, 
+            IAllowedRoleService allowedRoleService) {
 
             _userRolesRepository = userRolesRepository;
             _roleService = roleService;
@@ -40,6 +42,7 @@ namespace Orchard.Roles.Drivers {
             _authorizationService = authorizationService;
             _roleEventHandlers = roleEventHandlers;
             _workContext = workContext;
+            _allowedRoleService = allowedRoleService;
             T = NullLocalizer.Instance;
         }
 
@@ -55,9 +58,8 @@ namespace Orchard.Roles.Drivers {
             // don't show editor without apply roles permission
             if (!_authorizationService.TryCheckAccess(Permissions.AssignRoles, _authenticationService.GetAuthenticatedUser(), userRolesPart))
                 return null;
-            ////Changes
             var userRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
-            IList<string> allowedRoles = userRoles.SelectMany(userRole => _roleService.GetAllowedRolesForRoleByName(userRole)).ToList();
+            IList<string> allowedRoles = userRoles.SelectMany(userRole => _allowedRoleService.GetAllowedRolesForRoleByName(userRole)).ToList();
             return ContentShape("Parts_Roles_UserRoles_Edit",
                     () => {
                        var roles =_roleService.GetRoles().Select(x => new UserRoleEntry {
@@ -78,6 +80,9 @@ namespace Orchard.Roles.Drivers {
             if (!_authorizationService.TryCheckAccess(Permissions.AssignRoles, _authenticationService.GetAuthenticatedUser(), userRolesPart))
                 return null;
             
+            var userRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
+            IList<string> allowedRoles = userRoles.SelectMany(userRole => _allowedRoleService.GetAllowedRolesForRoleByName(userRole)).ToList();
+
             var model = BuildEditorViewModel(userRolesPart);
             if (updater.TryUpdateModel(model, Prefix, null, null)) {
                 var currentUserRoleRecords = _userRolesRepository.Fetch(x => x.UserId == model.User.Id).ToArray();
@@ -88,7 +93,7 @@ namespace Orchard.Roles.Drivers {
                     _userRolesRepository.Create(new UserRolesPartRecord { UserId = model.User.Id, Role = addingRole });
                     _roleEventHandlers.UserAdded(new UserAddedContext {Role = addingRole, User = model.User});
                 }
-                foreach (var removingRole in currentUserRoleRecords.Where(x => !targetRoleRecords.Contains(x.Role))) {
+                foreach (var removingRole in currentUserRoleRecords.Where(x => !targetRoleRecords.Contains(x.Role)).Where(x => allowedRoles.Any(y => y == x.Role.Name))) {
                     _notifier.Warning(T("Removing role {0} from user {1}", removingRole.Role.Name, userRolesPart.As<IUser>().UserName));
                     _userRolesRepository.Delete(removingRole);
                     _roleEventHandlers.UserRemoved(new UserRemovedContext { Role = removingRole.Role, User = model.User });

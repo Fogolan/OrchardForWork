@@ -73,26 +73,30 @@ namespace Orchard.Roles.Services {
             TriggerSignal();
         }
 
-        public IList<string> GetAllowedRolesForRoleByName(string roleName) {
+        public IList<string> GetAllowedRolesForRoleByName(string roleName)
+        {
             return _roleAllowedRolesRepository.Fetch(x => x.Role.Name == roleName).Select(x => x.AllowedRole.AllowedRole).ToList();
         }
 
-        public void AddAllowedRoles(string roleName, IList<string> allowedRoles) {
+        public void AddAllowedRoles(string roleName, IList<string> allowedRoles)
+        {
             foreach (var allowedRole in allowedRoles)
                 CreateAllowedRoleForRole(roleName, allowedRole);
         }
-        
-        public void CreateAllowedRoleForRole(string roleName, string allowedRoleName) {
+
+        public void CreateAllowedRoleForRole(string roleName, string allowedRoleName)
+        {
             if (GetRoleByName(allowedRoleName) == null)
                 return;
             CreateAllowedRole(allowedRoleName);
             RoleRecord roleRecord = GetRoleByName(roleName);
             AllowedRoleRecord allowedRoleRecord = _allowedRolesRepository.Get(x => x.AllowedRole == allowedRoleName);
-            roleRecord.AllowedRoles.Add(new RoleAllowedRolesRecord { AllowedRole = allowedRoleRecord, Role = roleRecord});
+            roleRecord.AllowedRoles.Add(new RoleAllowedRolesRecord { AllowedRole = allowedRoleRecord, Role = roleRecord });
             TriggerSignal();
         }
 
-        private void CreateAllowedRole(string allowedRoleName) {
+        private void CreateAllowedRole(string allowedRoleName)
+        {
             if (_allowedRolesRepository.Get(x => x.AllowedRole == allowedRoleName) == null)
             {
                 _allowedRolesRepository.Create(new AllowedRoleRecord
@@ -102,9 +106,12 @@ namespace Orchard.Roles.Services {
             }
         }
 
-        public void CreatePermissionForRole(string roleName, string permissionName) {
-            if (_permissionRepository.Get(x => x.Name == permissionName) == null) {
-                _permissionRepository.Create(new PermissionRecord {
+        public void CreatePermissionForRole(string roleName, string permissionName)
+        {
+            if (_permissionRepository.Get(x => x.Name == permissionName) == null)
+            {
+                _permissionRepository.Create(new PermissionRecord
+                {
                     Description = GetPermissionDescription(permissionName),
                     Name = permissionName,
                     FeatureName = GetFeatureName(permissionName)
@@ -115,7 +122,7 @@ namespace Orchard.Roles.Services {
             roleRecord.RolesPermissions.Add(new RolesPermissionsRecord { Permission = permissionRecord, Role = roleRecord });
             _roleEventHandlers.PermissionAdded(new PermissionAddedContext { Role = roleRecord, Permission = permissionRecord });
             TriggerSignal();
-            
+
         }
 
         public void UpdateRole(int id, string roleName, IEnumerable<string> rolePermissions) {

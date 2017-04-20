@@ -1,4 +1,6 @@
-﻿namespace Orchard.Roles.Models
+﻿using Orchard.Roles.Models;
+
+namespace RoleManager.Models
 {
     public class RoleAllowedRolesRecord
     {

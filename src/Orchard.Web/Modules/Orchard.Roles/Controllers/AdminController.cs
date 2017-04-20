@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AllowedRoles.Services;
 using Orchard.ContentManagement;
 using Orchard.Localization;
 using Orchard.Logging;
@@ -12,12 +13,12 @@ using Orchard.Roles.Services;
 using Orchard.Roles.ViewModels;
 using Orchard.Security;
 using Orchard.UI.Notify;
-using Orchard.Users.Models;
 
 namespace Orchard.Roles.Controllers {
     [ValidateInput(false)]
     public class AdminController : Controller {
         private readonly IRoleService _roleService;
+        private readonly IAllowedRoleService _allowedRoleService;
         private readonly IAuthorizationService _authorizationService;
         private readonly WorkContext _workContext;
 
@@ -26,11 +27,13 @@ namespace Orchard.Roles.Controllers {
             IRoleService roleService,
             INotifier notifier,
             IAuthorizationService authorizationService,
-            WorkContext workContext) {
+            WorkContext workContext, 
+            IAllowedRoleService allowedRoleService) {
             Services = services;
             _roleService = roleService;
             _authorizationService = authorizationService;
             _workContext = workContext;
+            _allowedRoleService = allowedRoleService;
 
             T = NullLocalizer.Instance;
             Logger = NullLogger.Instance;
@@ -44,7 +47,8 @@ namespace Orchard.Roles.Controllers {
             if (!Services.Authorizer.Authorize(Permissions.ManageRoles, T("Not authorized to manage roles")))
                 return new HttpUnauthorizedResult();
             var userRoles = _workContext.CurrentUser.As<UserRolesPart>().Roles;
-            IList<string> allowedRoles = userRoles.SelectMany(userRole => _roleService.GetAllowedRolesForRoleByName(userRole)).ToList();
+            IList<string> allowedRoles = userRoles.SelectMany(userRole => _allowedRoleService.GetAllowedRolesForRoleByName(userRole)).Distinct().ToList();
+
             var model = new RolesIndexViewModel { Rows = _roleService.GetRoles().Where(r => allowedRoles.Any(n => n == r.Name)).OrderBy(r => r.Name).ToList() };
 
             return View(model);
