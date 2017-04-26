@@ -34,7 +34,7 @@ namespace Orchard.AntiSpam.Controllers {
             Shape = shapeFactory;
         }
 
-        dynamic Shape { get; set; }
+        private dynamic Shape { get; set; }
         public IOrchardServices Services { get; set; }
         public Localizer T { get; set; }
 

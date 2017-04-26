@@ -1,0 +1,18 @@
+﻿@model DashboardManaging.Models.GmailApiSettingsPart
+
+<fieldset>
+    <legend>@T("GmailApi")</legend>
+    <div>
+        @Html.TextBoxFor(m => m.ClientId, new { @class = "text medium" })
+        <span class="hint">@T("ClientId")</span>
+    </div>
+    <div>
+        @Html.TextBoxFor(m => m.DiscoveryDocs, new { @class = "text medium" })
+        <span class="hint">@T("DiscoveryDocs")</span>
+    </div>
+
+    <div>
+        @Html.EditorFor(m => m.Scopes, new { @class = "text medium" })
+        <span class="hint">@T("Scopes")</span>
+    </div>
+</fieldset>
