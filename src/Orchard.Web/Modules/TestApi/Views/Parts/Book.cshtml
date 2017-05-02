@@ -1,0 +1,15 @@
+﻿@{
+    var Name = (string) Model.Name;
+    var Author = (string) Model.Author;
+    var Year = (int) Model.Year;
+    var bookId = Model.Id;
+    Script.Require("TestApi.BookItem");
+}
+<article>
+    Name: @Name<br />
+    Author: @Author <br/>
+    Year: @Year
+    <footer>
+        <button class="addBook" id="@bookId">@T("Add to cart")</button>
+    </footer>
+</article>

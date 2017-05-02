@@ -1,0 +1,24 @@
+﻿@model TestApi.Models.BookPart
+<fieldset>
+    <legend>Book Fields</legend>
+
+    <div class="editor-label">@Html.LabelFor(x => x.Name)</div>
+    <div class="editor-field">
+        @Html.EditorFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+
+    <div class="editor-label">@Html.LabelFor(x => x.Author)</div>
+    <div class="editor-field">
+        @Html.EditorFor(x => x.Author)
+        @Html.ValidationMessageFor(x => x.Author)
+    </div>
+    <div class="hint">Book Author</div>
+    
+    <div class="editor-label">@Html.LabelFor(x => x.Year)</div>
+    <div class="editor-field">
+        @Html.EditorFor(x => x.Year)
+        @Html.ValidationMessageFor(x => x.Year)
+    </div>
+    <div class="hint">Year of publishing</div>
+</fieldset>
