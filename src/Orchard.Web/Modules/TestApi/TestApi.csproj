@@ -86,6 +86,10 @@
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
       <Private>True</Private>
@@ -127,13 +131,14 @@
     <Compile Include="Routing\Api\ApiRoutes.cs" />
     <Compile Include="Services\IShoppingCart.cs" />
     <Compile Include="Services\ShoppingCart.cs" />
+    <Compile Include="ViewModels\BookPartViewModel.cs" />
+    <Compile Include="WebApiConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets.json" />
     <Content Include="Assets\Styles.less" />
-    <Content Include="images\sprites.png" />
-    <Content Include="Scripts\bookItem.js" />
-    <Content Include="Scripts\shoppingcart.js" />
+    <Content Include="Scripts\shoppingCart.js" />
+    <Content Include="Scripts\addToCart.js" />
     <Content Include="Styles\common.css" />
     <Content Include="Styles\shoppingcart.css" />
     <Content Include="Styles\Styles.css" />

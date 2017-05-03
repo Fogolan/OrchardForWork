@@ -22,7 +22,6 @@ namespace TestApi.Controllers.Api
         [Themed]
         public ActionResult Index() {
             var shape = _services.New.ShoppingCart(
-                Books: _shoppingCart.GetBooks().ToList()
             );
             return new ShapeResult(this, shape);
         }

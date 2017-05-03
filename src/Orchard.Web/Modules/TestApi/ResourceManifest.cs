@@ -11,7 +11,8 @@ namespace TestApi
             manifest.DefineStyle("TestApi.Common").SetUrl("common.css");
             manifest.DefineStyle("TestApi.ShoppingCart").SetUrl("shoppingcart.css").SetDependencies("TestApi.Common");
 
-            manifest.DefineScript("TestApi.BookItem").SetUrl("bookItem.js").SetDependencies("jQuery");
+            manifest.DefineScript("TestApi.AddToCart").SetUrl("addToCart.js").SetDependencies("jQuery");
+            manifest.DefineScript("TestApi.ShoppingCart").SetUrl("shoppingCart.js").SetDependencies("jQuery");
         }
     }
 }

@@ -1,31 +1,8 @@
 ﻿@using TestApi.Models
 @{
     Style.Require("TestApi.ShoppingCart");
-    var items = (IList<BookPart>)Model.Books;
+    Script.Require("TestApi.ShoppingCart");
 }
 <article class="shoppingcart">
-    <table>
-        <thead>
-        <tr>
-            <td>Article</td>
-            <td></td>
-        </tr>
-        </thead>
-        <tbody>
-        @for (var i = 0; i < items.Count; i++) {
-            var book = items[i];
-            <tr>
-                <td>@book.Name</td>
-                <td class="action"><a class="button" id ="@items[i].Id" href="#">x</a></td>
-            </tr>
-        }
- 
-        </tbody>
-    </table>
-    <footer>
-        <div class="group">
-            <div class="align left"><a class="button" href="#">Continue shopping</a></div>
-            <div class="align right"><a class="button next" href="#">Proceed to checkout</a></div>
-        </div>
-    </footer>
+    <div id="tableBlock"></div>
 </article>
