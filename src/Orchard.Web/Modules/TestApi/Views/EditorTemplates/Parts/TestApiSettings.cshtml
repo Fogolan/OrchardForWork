@@ -1,0 +1,9 @@
+﻿@model TestApi.Models.TestApiSettingsPart
+
+<fieldset>
+    <legend>@T("TestApi")</legend>
+    <div>
+        @Html.TextBoxFor(m => m.SecretKey, new { @class = "text medium" })
+        <span class="hint">@T("ApiKey")</span>
+    </div>
+</fieldset>

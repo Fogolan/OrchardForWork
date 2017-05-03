@@ -1,8 +1,7 @@
 ﻿using Orchard.ContentManagement;
 using Orchard.ContentManagement.Handlers;
-using Orchard.Localization;
 using Orchard.Users.Models;
-
+using Orchard.Localization;
 namespace Orchard.Users.Handlers {
     public class RegistrationSettingsPartHandler : ContentHandler {
         public RegistrationSettingsPartHandler() {

@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Results;
-using System.Web.Script.Serialization;
-using TestApi.Models;
+using TestApi.Attributes;
 using TestApi.Services;
-using TestApi.ViewModels;
 
 namespace TestApi.Controllers.Api
 {
+    [ApiKeyAuthorization]
     public class CartController : ApiController {
         private readonly IShoppingCart _shoppingCart;
 
@@ -33,7 +28,6 @@ namespace TestApi.Controllers.Api
         [HttpPost]
         public HttpResponseMessage Add(int id) {
             _shoppingCart.Add(id);
-            //var newUrl = Url.Link("ShoppingCart", new {controller = "ShoppingCart", action = "Index", area = "TestApi"});
             return Request.CreateResponse(HttpStatusCode.OK,
                 new { Success = true});
         }

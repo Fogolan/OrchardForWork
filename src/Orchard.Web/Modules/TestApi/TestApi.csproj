@@ -116,14 +116,17 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ApiKeyAuthorizationAttribute.cs" />
     <Compile Include="Controllers\Api\CartController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Drivers\BookPartDriver.cs" />
     <Compile Include="Filters\BookPartFilter.cs" />
     <Compile Include="Handlers\ProductPartHandler.cs" />
+    <Compile Include="Handlers\TestApiSettingsPartHandler.cs" />
     <Compile Include="Migrations.cs" />
     <Compile Include="Models\BookPart.cs" />
     <Compile Include="Models\BookPartRecord.cs" />
+    <Compile Include="Models\TestApiSettingsPart.cs" />
     <Compile Include="Models\ShoppingCartItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceManifest.cs" />
@@ -181,15 +184,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\EditorTemplates\Parts\Api.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\EditorTemplates\Parts\ApiSettings.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Parts.Api.SummaryAdmin.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts\Book.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +196,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ShoppingCart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Parts\TestApiSettings.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

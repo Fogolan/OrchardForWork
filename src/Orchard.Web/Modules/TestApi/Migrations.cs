@@ -26,5 +26,14 @@ namespace TestApi
 
             return 3;
         }
+
+        public int UpdateFrom3() {
+            SchemaBuilder.CreateTable("WebServiceSettingsPartRecord",
+                table => table.ContentPartVersionRecord()
+                    .Column<string>("ApiKey")
+                    .Column<bool>("IsActive")
+            );
+            return 4;
+        }
     }
 }
