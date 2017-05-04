@@ -13,6 +13,8 @@ namespace TestApi
 
             manifest.DefineScript("TestApi.AddToCart").SetUrl("addToCart.js").SetDependencies("jQuery");
             manifest.DefineScript("TestApi.ShoppingCart").SetUrl("shoppingCart.js").SetDependencies("jQuery");
+            manifest.DefineScript("TestApi.Register").SetUrl("registration.js").SetDependencies("jQuery");
+            manifest.DefineScript("TestApi.login").SetUrl("login.js").SetDependencies("jQuery");
         }
     }
 }

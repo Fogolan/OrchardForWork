@@ -21,8 +21,19 @@ namespace TestApi.Controllers.Api
 
         [Themed]
         public ActionResult Index() {
-            var shape = _services.New.ShoppingCart(
-            );
+            var shape = _services.New.ShoppingCart();
+            return new ShapeResult(this, shape);
+        }
+
+        [Themed]
+        public ActionResult Register() {
+            var shape = _services.New.RegisterUser();
+            return new ShapeResult(this, shape);
+        }
+        [Themed]
+        public ActionResult Login()
+        {
+            var shape = _services.New.LoginUser();
             return new ShapeResult(this, shape);
         }
     }

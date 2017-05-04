@@ -49,7 +49,7 @@ namespace TestApi.Services
 
         public void Remove(int bookId)
         {
-            var item = Items.SingleOrDefault(x => x.BookId == bookId);
+            var item = Items.FirstOrDefault(x => x.BookId == bookId);
             if (item == null)
                 return;
 

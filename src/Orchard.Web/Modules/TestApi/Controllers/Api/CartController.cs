@@ -2,12 +2,11 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using TestApi.Attributes;
 using TestApi.Services;
 
 namespace TestApi.Controllers.Api
 {
-    [ApiKeyAuthorization]
+    [Authorize]
     public class CartController : ApiController {
         private readonly IShoppingCart _shoppingCart;
 

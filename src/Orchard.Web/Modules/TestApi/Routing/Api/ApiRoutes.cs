@@ -20,6 +20,15 @@ namespace TestApi.Routing.Api
                         controller = "Cart",
                         id = RouteParameter.Optional
                     }
+                },
+                new HttpRouteDescriptor {
+                    Name = "Account Api",
+                    Priority = 2,
+                    RouteTemplate = "api/account/",
+                    Defaults = new {
+                        area = "TestApi",
+                        controller = "Account",
+                    }
                 }
             };
         }

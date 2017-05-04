@@ -23,10 +23,16 @@ function DeleteBook(id) {
 }
 
 function GetAllBooks() {
+    var tokenKey = "tokenInfo";
     $.ajax({
         url: '/OrchardLocal/api/cart/',
         type: 'GET',
         dataType: 'json',
+        beforeSend: function (xhr) {
+
+            var token = sessionStorage.getItem(tokenKey);
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+        },
         success: function (data) {
             WriteResponse(data);
         },
@@ -37,7 +43,6 @@ function GetAllBooks() {
 }
 
 function WriteResponse(books) {
-
     var strResult = "<table><th>Название</th>";
     $.each(books, function (index, book) {
         strResult += "<tr><td>" + book.name + "</td>" +

@@ -3,6 +3,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using Autofac;
+using Autofac.Core;
 using Newtonsoft.Json.Serialization;
 
 namespace TestApi

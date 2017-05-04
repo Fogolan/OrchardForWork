@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Web.Routing;
+using System.Web.Http;
 using Orchard.Mvc.Routes;
 
 namespace TestApi
@@ -15,20 +14,14 @@ namespace TestApi
         public IEnumerable<RouteDescriptor> GetRoutes()
         {
             return new[] {
-                new RouteDescriptor {
+                new HttpRouteDescriptor {
                     Priority = 5,
-                    Route = new Route(
-                        "ShoppingCart",
-                        new RouteValueDictionary {
-                            {"area", "TestApi"},
-                            {"controller", "ShoppingCart"},
-                            {"action", "Index"}
-                        },
-                        new RouteValueDictionary(),
-                        new RouteValueDictionary {
-                            {"area", "TestApi"}
-                        },
-                        new MvcRouteHandler())
+                    RouteTemplate = "api/account/{action}/{id}",
+                    Defaults = new {
+                        area = "TestApi",
+                        controller = "Account",
+                        id = RouteParameter.Optional
+                    }
                 }
             };
         }
