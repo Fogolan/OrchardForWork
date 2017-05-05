@@ -29,27 +29,12 @@ namespace TestApi.Middleware
                         {
                             TokenEndpointPath = new PathString("/Token"),
                             Provider = new AuthProvider(_workContextAccessor),
-                            AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                            AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
                             AllowInsecureHttp = true
                         };
 
                         app.UseOAuthAuthorizationServer(oAuthOptions);
                         app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
-                    }
-                },
-                new OwinMiddlewareRegistration {
-                    Priority = "2",
-                    Configure = app => {
-                        app.Use(async (context, next) => {
-                            var workContext = _workContextAccessor.GetContext();
-                            var authenticationService = workContext.Resolve<IAuthenticationService>();
-                            var membershipService = workContext.Resolve<IMembershipService>();
-
-                            var orchardUser = membershipService.GetUser(context.Request.User.Identity.Name);
-                            authenticationService.SetAuthenticatedUserForRequest(orchardUser);
-
-                            await next();
-                        });
                     }
                 }
             };

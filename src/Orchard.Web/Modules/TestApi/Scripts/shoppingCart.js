@@ -8,11 +8,16 @@ function DeleteItem(el) {
 }
 
 function DeleteBook(id) {
-
+    var tokenKey = "tokenInfo";
     $.ajax({
         url: '/OrchardLocal/api/cart/' + id,
         type: 'DELETE',
         contentType: "application/json;charset=utf-8",
+        beforeSend: function (xhr) {
+
+            var token = sessionStorage.getItem(tokenKey);
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+        },
         success: function (msg) {
             GetAllBooks();
         },

@@ -13,7 +13,7 @@
             url: '/OrchardLocal/Token',
             data: loginData
         }).success(function (data) {
-            $('.userName').text(data.userName);
+            $('.userName').text(data.Email);
             $('.userInfo').css('display', 'block');
             $('.loginForm').css('display', 'none');
 

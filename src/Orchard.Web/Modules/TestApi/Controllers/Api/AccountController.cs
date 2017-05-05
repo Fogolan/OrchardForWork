@@ -23,24 +23,12 @@ namespace TestApi.Controllers.Api
 
         public Localizer T { get; set; }
 
-        public string Get()
-        {
-            return "test";
-        }
-
         [AllowAnonymous]
         [HttpPost]
         public IHttpActionResult Register(RegisterBindingModel model)
         {
-            if (model == null)
-            {
-                return BadRequest();
-            }
-
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             if (!string.IsNullOrEmpty(model.Email))
             {
@@ -53,9 +41,7 @@ namespace TestApi.Controllers.Api
 
             var user = _membershipService.CreateUser(new CreateUserParams(model.Email, model.Password, model.Email, null, null, true));
             if (user != null)
-            {
                 return Ok();
-            }
 
             return InternalServerError();
         }
