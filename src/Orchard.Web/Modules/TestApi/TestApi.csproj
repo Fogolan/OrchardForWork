@@ -148,6 +148,7 @@
     <Compile Include="Models\ShoppingCartItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\AuthProvider.cs" />
+    <Compile Include="Providers\RefreshTokenProvider.cs" />
     <Compile Include="ResourceManifest.cs" />
     <Compile Include="Routes.cs" />
     <Compile Include="Routing\Api\ApiRoutes.cs" />
@@ -161,6 +162,7 @@
     <Content Include="Assets.json" />
     <Content Include="Assets\Styles.less" />
     <Content Include="Scripts\login.js" />
+    <Content Include="Scripts\refreshToken.js" />
     <Content Include="Scripts\registration.js" />
     <Content Include="Scripts\shoppingCart.js" />
     <Content Include="Scripts\addToCart.js" />
@@ -168,7 +170,9 @@
     <Content Include="Styles\shoppingcart.css" />
     <Content Include="Styles\Styles.css" />
     <Content Include="Styles\Styles.min.css" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\Web.config" />
     <Content Include="Styles\Web.config" />
     <Content Include="Module.txt" />

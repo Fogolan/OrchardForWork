@@ -29,8 +29,9 @@ namespace TestApi.Middleware
                         {
                             TokenEndpointPath = new PathString("/Token"),
                             Provider = new AuthProvider(_workContextAccessor),
-                            AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
-                            AllowInsecureHttp = true
+                            AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(30),
+                            AllowInsecureHttp = true,
+                            RefreshTokenProvider = new RefreshTokenProvider()
                         };
 
                         app.UseOAuthAuthorizationServer(oAuthOptions);

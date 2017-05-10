@@ -13,6 +13,7 @@ function AddBook(id) {
         url: 'api/cart/' + id +'?apiKey=12345',
         type: 'POST',
         contentType: "application/json;charset=utf-8",
+        data: "grant_type=refresh_token&refresh_token=" + sessionStorage.getItem("refresh_token"),
         beforeSend: function (xhr) {
 
             var token = sessionStorage.getItem(tokenKey);
@@ -21,6 +22,13 @@ function AddBook(id) {
         success: function (msg) {
             if (msg.success == true) {
                 window.location = "/OrchardLocal/testapi/shoppingCart/";
+            }
+        },
+        statusCode: {
+            401: function (response) {
+                var token = sessionStorage.getItem(tokenKey);
+                var refreshToken = sessionStorage.getItem("refresh_token");
+                RefreshToken(token, refreshToken);
             }
         },
         error: function (x, y, z) {
