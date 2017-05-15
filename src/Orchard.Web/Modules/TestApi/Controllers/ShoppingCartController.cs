@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Orchard;
 using Orchard.Mvc;
 using Orchard.Themes;
-using TestApi.Models;
 using TestApi.Services;
 
-namespace TestApi.Controllers.Api
+namespace TestApi.Controllers
 {
     public class ShoppingCartController : Controller
     {

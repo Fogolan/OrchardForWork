@@ -101,7 +101,6 @@ namespace Orchard.Users.Controllers {
                 _membershipService.PasswordIsExpired(user, membershipSettings.PasswordExpirationTimeInDays)) {
                 return RedirectToAction("ChangeExpiredPassword", new { username = user.UserName });
             }
-
             _authenticationService.SignIn(user, rememberMe);
             _userEventHandler.LoggedIn(user);
 

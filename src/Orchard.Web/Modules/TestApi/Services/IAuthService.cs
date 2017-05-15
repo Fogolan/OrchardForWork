@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
 using Orchard;
-using Orchard.Security;
 
 namespace TestApi.Services
 {
     public interface IAuthService : IDependency {
-        Task GenerateTokenForUser(IUser user);
+        JObject GenerateLocalAccessTokenResponse(string userName);
     }
 }

@@ -10,13 +10,18 @@ using TestApi.Providers;
 
 namespace TestApi.Middleware
 {
-    public class AuthMiddleware : IOwinMiddlewareProvider
-    {
+    public class AuthMiddleware : IOwinMiddlewareProvider {
+
+        public static OAuthBearerAuthenticationOptions AuthBearerAuthenticationOptions;
         private readonly IWorkContextAccessor _workContextAccessor;
 
         public AuthMiddleware(IWorkContextAccessor workContextAccessor)
         {
             _workContextAccessor = workContextAccessor;
+        }
+
+        static AuthMiddleware() {
+            AuthBearerAuthenticationOptions = new OAuthBearerAuthenticationOptions();
         }
 
         public IEnumerable<OwinMiddlewareRegistration> GetOwinMiddlewares()
@@ -35,7 +40,7 @@ namespace TestApi.Middleware
                         };
 
                         app.UseOAuthAuthorizationServer(oAuthOptions);
-                        app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+                        app.UseOAuthBearerAuthentication(AuthBearerAuthenticationOptions);
                     }
                 }
             };

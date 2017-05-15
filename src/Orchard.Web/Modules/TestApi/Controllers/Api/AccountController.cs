@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Web;
+using System.Web.Http;
 using Orchard.Localization;
 using Orchard.Security;
 using Orchard.Users.Services;
@@ -25,8 +26,7 @@ namespace TestApi.Controllers.Api
 
         [AllowAnonymous]
         [HttpPost]
-        public IHttpActionResult Register(RegisterBindingModel model)
-        {
+        public IHttpActionResult Register(RegisterBindingModel model) {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
