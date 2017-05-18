@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Users.Events;
@@ -28,9 +29,11 @@ namespace TestApi.Handlers
         }
 
         public void LoggedIn(IUser user) {
-           var token = _authService.GenerateLocalAccessTokenResponse(user.UserName);
-            //var httpContext = _httpContextAccessor.Current();
-            //httpContext.Response.Write(token);
+
+            var httpContext = _httpContextAccessor.Current();
+            var owinContext = httpContext.GetOwinContext();
+            var token = _authService.GenerateLocalAccessTokenResponse(user.UserName, owinContext);
+            httpContext.Response.Cookies.Add(new HttpCookie("tokenInfo", token.ToString()));
         }
 
         public void LogInFailed(string userNameOrEmail, string password) {
