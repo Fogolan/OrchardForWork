@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Orchard;
+using Orchard.Data;
 using Orchard.Owin;
 using Orchard.Security;
 using Owin;
+using TestApi.Models;
 using TestApi.Providers;
+using TestApi.Services;
 
 namespace TestApi.Middleware
 {
     public class AuthMiddleware : IOwinMiddlewareProvider {
 
         public static OAuthBearerAuthenticationOptions AuthBearerAuthenticationOptions;
+        private readonly IRefreshTokenService _refreshTokenService;
         private readonly IWorkContextAccessor _workContextAccessor;
 
-        public AuthMiddleware(IWorkContextAccessor workContextAccessor)
-        {
+        public AuthMiddleware(
+            IWorkContextAccessor workContextAccessor,
+            IRefreshTokenService refreshTokenService) {
             _workContextAccessor = workContextAccessor;
+            _refreshTokenService = refreshTokenService;
         }
 
         static AuthMiddleware() {
@@ -36,7 +42,7 @@ namespace TestApi.Middleware
                             Provider = new AuthProvider(_workContextAccessor),
                             AccessTokenExpireTimeSpan = TimeSpan.FromSeconds(30),
                             AllowInsecureHttp = true,
-                            RefreshTokenProvider = new RefreshTokenProvider()
+                            RefreshTokenProvider = new RefreshTokenProvider(_refreshTokenService)
                         };
 
                         app.UseOAuthAuthorizationServer(oAuthOptions);

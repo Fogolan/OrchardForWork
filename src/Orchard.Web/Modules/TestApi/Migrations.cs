@@ -1,4 +1,5 @@
-﻿using Orchard.ContentManagement.MetaData;
+﻿using System;
+using Orchard.ContentManagement.MetaData;
 using Orchard.Core.Contents.Extensions;
 using Orchard.Data.Migration;
 
@@ -34,6 +35,18 @@ namespace TestApi
                     .Column<bool>("IsActive")
             );
             return 4;
+        }
+
+        public int UpdateFrom4() {
+            SchemaBuilder.CreateTable("RefreshTokenRecord", table => table
+                .Column<int>("Id", column => column.PrimaryKey().Identity())
+                .Column<string>("Token", c => c.NotNull().WithLength(500))
+                .Column<string>("UserName", c => c.NotNull())
+                .Column<DateTime>("IssuedUtc", c => c.NotNull())
+                .Column<DateTime>("ExpiresUtc", c => c.NotNull())
+                .Column<string>("ProtectedTicket", c => c.NotNull().WithLength(500))
+            );
+            return 5;
         }
     }
 }

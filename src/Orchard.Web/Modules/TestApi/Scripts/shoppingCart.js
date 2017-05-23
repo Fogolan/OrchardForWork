@@ -13,6 +13,7 @@ function DeleteBook(id) {
         url: '/OrchardLocal/api/cart/' + id,
         type: 'DELETE',
         contentType: "application/json;charset=utf-8",
+        data: "grant_type=refresh_token&refresh_token=" + sessionStorage.getItem("refresh_token"),
         beforeSend: function (xhr) {
 
             var token = sessionStorage.getItem(tokenKey);
@@ -20,6 +21,13 @@ function DeleteBook(id) {
         },
         success: function (msg) {
             GetAllBooks();
+        },
+        statusCode: {
+            401: function (response) {
+                var token = sessionStorage.getItem(tokenKey);
+                var refreshToken = sessionStorage.getItem("refresh_token");
+                RefreshToken(token, refreshToken);
+            }
         },
         error: function (x, y, z) {
             alert(x + '\n' + y + '\n' + z);
@@ -33,6 +41,7 @@ function GetAllBooks() {
         url: '/OrchardLocal/api/cart/',
         type: 'GET',
         dataType: 'json',
+        data: "grant_type=refresh_token&refresh_token=" + sessionStorage.getItem("refresh_token"),
         beforeSend: function (xhr) {
 
             var token = sessionStorage.getItem(tokenKey);
@@ -40,6 +49,13 @@ function GetAllBooks() {
         },
         success: function (data) {
             WriteResponse(data);
+        },
+        statusCode: {
+            401: function (response) {
+                var token = sessionStorage.getItem(tokenKey);
+                var refreshToken = sessionStorage.getItem("refresh_token");
+                RefreshToken(token, refreshToken);
+            }
         },
         error: function (x, y, z) {
             alert(x + '\n' + y + '\n' + z);
