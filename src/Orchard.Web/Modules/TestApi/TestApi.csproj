@@ -48,8 +48,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.6.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Autofac.4.6.0\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Autofac.3.5.0\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -137,12 +137,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ApiKeyAuthorizationAttribute.cs" />
-    <Compile Include="Controllers\Api\AccountController.cs" />
     <Compile Include="Controllers\Api\CartController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Drivers\BookPartDriver.cs" />
     <Compile Include="Filters\BookPartFilter.cs" />
-    <Compile Include="Handlers\LoginUserEventHandler.cs" />
     <Compile Include="Handlers\ProductPartHandler.cs" />
     <Compile Include="Handlers\TestApiSettingsPartHandler.cs" />
     <Compile Include="Middleware\AuthMiddleware.cs" />
@@ -206,10 +204,6 @@
       <Project>{5531e894-d259-45a3-aa61-26dbe720c1ce}</Project>
       <Name>Orchard.Projections</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Orchard.Users\Orchard.Users.csproj">
-      <Project>{79AED36E-ABD0-4747-93D3-8722B042454B}</Project>
-      <Name>Orchard.Users</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Security\" />
@@ -217,7 +211,9 @@
     <Folder Include="Styles\Images\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts\Book.cshtml" />
@@ -235,12 +231,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\EditorTemplates\Parts\TestApiSettings.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\RegisterUser.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\LoginUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\TokenShape.cshtml" />
