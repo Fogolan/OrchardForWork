@@ -29,11 +29,10 @@ namespace TestApi.Handlers
         }
 
         public void LoggedIn(IUser user) {
-
             var httpContext = _httpContextAccessor.Current();
             var owinContext = httpContext.GetOwinContext();
             var token = _authService.GenerateLocalAccessTokenResponse(user.UserName, owinContext);
-            httpContext.Response.Cookies.Add(new HttpCookie("tokenInfo", token.ToString()));
+            httpContext.Response.Headers.Add("access_token", token);
         }
 
         public void LogInFailed(string userNameOrEmail, string password) {

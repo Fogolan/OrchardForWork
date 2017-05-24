@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin;
-using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Infrastructure;
-using Microsoft.Owin.Security.OAuth;
-using Orchard.Data;
-using TestApi.Helpers;
 using TestApi.Middleware;
-using TestApi.Models;
 using TestApi.Services;
 
 namespace TestApi.Providers {

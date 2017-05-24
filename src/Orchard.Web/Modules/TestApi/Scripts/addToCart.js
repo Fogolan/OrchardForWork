@@ -9,9 +9,7 @@
 
 function AddBook(id) {
     var tokenKey = "tokenInfo";
-    var token = JSON.parse(getCookie(tokenKey));
-    console.log("access",token.access_token);
-    console.log("refresh",token.refresh_token);
+    var token = JSON.parse(sessionStorage.getItem(tokenKey));
     $.ajax({
         url: 'api/cart/' + id +'?apiKey=12345',
         type: 'POST',
@@ -21,7 +19,7 @@ function AddBook(id) {
             xhr.setRequestHeader("Authorization", "Bearer " + token.access_token);
         },
         success: function (msg) {
-            if (msg.success == true) {
+            if (msg.success === true) {
                 window.location = "/OrchardLocal/testapi/shoppingCart/";
             }
         },
@@ -34,11 +32,4 @@ function AddBook(id) {
             alert(x + '\n' + y + '\n' + z);
         }
     });
-}
-
-function getCookie(name) {
-    var matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
 }

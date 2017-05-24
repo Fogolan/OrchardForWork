@@ -5,6 +5,6 @@ using Orchard;
 namespace TestApi.Services
 {
     public interface IAuthService : IDependency {
-        JObject GenerateLocalAccessTokenResponse(string userName, IOwinContext owinContext);
+        string GenerateLocalAccessTokenResponse(string userName, IOwinContext owinContext);
     }
 }

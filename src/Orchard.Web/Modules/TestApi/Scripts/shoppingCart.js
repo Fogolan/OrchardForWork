@@ -9,24 +9,21 @@ function DeleteItem(el) {
 
 function DeleteBook(id) {
     var tokenKey = "tokenInfo";
+    var token = JSON.parse(sessionStorage.getItem(tokenKey));
     $.ajax({
         url: '/OrchardLocal/api/cart/' + id,
         type: 'DELETE',
         contentType: "application/json;charset=utf-8",
-        data: "grant_type=refresh_token&refresh_token=" + sessionStorage.getItem("refresh_token"),
+        data: "grant_type=refresh_token&refresh_token=" + token.refresh_token,
         beforeSend: function (xhr) {
-
-            var token = sessionStorage.getItem(tokenKey);
-            xhr.setRequestHeader("Authorization", "Bearer " + token);
+            xhr.setRequestHeader("Authorization", "Bearer " + token.access_token);
         },
         success: function (msg) {
             GetAllBooks();
         },
         statusCode: {
             401: function (response) {
-                var token = sessionStorage.getItem(tokenKey);
-                var refreshToken = sessionStorage.getItem("refresh_token");
-                RefreshToken(token, refreshToken);
+                RefreshToken(token.access_token, token.refresh_token);
             }
         },
         error: function (x, y, z) {
@@ -37,24 +34,21 @@ function DeleteBook(id) {
 
 function GetAllBooks() {
     var tokenKey = "tokenInfo";
+    var token = JSON.parse(sessionStorage.getItem(tokenKey));
     $.ajax({
         url: '/OrchardLocal/api/cart/',
         type: 'GET',
         dataType: 'json',
-        data: "grant_type=refresh_token&refresh_token=" + sessionStorage.getItem("refresh_token"),
+        data: "grant_type=refresh_token&refresh_token=" + token.refresh_token,
         beforeSend: function (xhr) {
-
-            var token = sessionStorage.getItem(tokenKey);
-            xhr.setRequestHeader("Authorization", "Bearer " + token);
+            xhr.setRequestHeader("Authorization", "Bearer " + token.access_token);
         },
         success: function (data) {
             WriteResponse(data);
         },
         statusCode: {
             401: function (response) {
-                var token = sessionStorage.getItem(tokenKey);
-                var refreshToken = sessionStorage.getItem("refresh_token");
-                RefreshToken(token, refreshToken);
+                RefreshToken(token.access_token, token.refresh_token);
             }
         },
         error: function (x, y, z) {

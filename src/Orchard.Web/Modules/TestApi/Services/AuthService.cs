@@ -3,10 +3,11 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using TestApi.Middleware;
 using System;
+using System.Web.Helpers;
+using System.Web.Mvc;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Infrastructure;
 using Newtonsoft.Json.Linq;
-using TestApi.Helpers;
 using TestApi.Models;
 
 namespace TestApi.Services {
@@ -17,12 +18,12 @@ namespace TestApi.Services {
             _refreshTokenService = refreshTokenService;
         }
 
-        public JObject GenerateLocalAccessTokenResponse(string userName, IOwinContext owinContext) {
+        public string GenerateLocalAccessTokenResponse(string login, IOwinContext owinContext) {
             var tokenExpiration = TimeSpan.FromSeconds(60);
 
             var identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
 
-            identity.AddClaim(new Claim(ClaimTypes.Name, userName));
+            identity.AddClaim(new Claim(ClaimTypes.Name, login));
 
             var props = new AuthenticationProperties {
                 IssuedUtc = DateTime.UtcNow,
@@ -32,21 +33,20 @@ namespace TestApi.Services {
 
             var ticket = new AuthenticationTicket(identity, props);
             var accessToken = AuthMiddleware.AuthBearerAuthenticationOptions.AccessTokenFormat.Protect(ticket);
-            var refreshToken = GenerateRefreshToken(owinContext, ticket, userName, accessToken);
-            var tokenResponse = new JObject(
-                new JProperty("userName", userName),
-                new JProperty("access_token", accessToken),
-                new JProperty("refresh_token", refreshToken),
-                new JProperty("token_type", "bearer"),
-                new JProperty("expires_in", tokenExpiration.TotalSeconds.ToString()),
-                new JProperty(".issued", ticket.Properties.IssuedUtc.ToString()),
-                new JProperty(".expires", ticket.Properties.ExpiresUtc.ToString())
-            );
-
-            //var recieveContext = new AuthenticationTokenReceiveContext(owinContext, AuthMiddleware.AuthBearerAuthenticationOptions.AccessTokenFormat, accessToken);
-            //recieveContext.DeserializeTicket(recieveContext.Token);
-
-            return tokenResponse;
+            var refreshToken = GenerateRefreshToken(owinContext, ticket, login, accessToken);
+            var tokenResponse = new {
+                userName = login,
+                access_token = accessToken,
+                refresh_token = refreshToken,
+                token_type = "bearer",
+                expires_in = tokenExpiration.TotalSeconds.ToString(),
+                issued = ticket.Properties.IssuedUtc.ToString(),
+                expires = ticket.Properties.ExpiresUtc.ToString()
+            };
+            var token = Json.Encode(tokenResponse);
+            
+            owinContext.Response.Context.Environment.Add("access_key", token);
+            return token;
         }
 
         public string GenerateRefreshToken(IOwinContext owinContext, AuthenticationTicket ticket, string userName, string accessToken) {

@@ -1,0 +1,10 @@
+﻿@{
+    var token = Model.Token;
+}
+@if (!string.IsNullOrEmpty(token)) {
+    <script>
+        var tokenString = "@token".replace(/&quot;/g, '"');
+        sessionStorage.setItem("tokenInfo", tokenString);
+        console.log("getItem", sessionStorage.getItem("tokenInfo"));
+    </script>
+}

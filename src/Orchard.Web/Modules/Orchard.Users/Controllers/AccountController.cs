@@ -17,8 +17,11 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Orchard.Services;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using Orchard.Workflows.Helpers;
 
-namespace Orchard.Users.Controllers {
+namespace Orchard.Users.Controllers
+{
     [HandleError, Themed]
     public class AccountController : Controller {
         private readonly IAuthenticationService _authenticationService;
@@ -103,7 +106,8 @@ namespace Orchard.Users.Controllers {
             }
             _authenticationService.SignIn(user, rememberMe);
             _userEventHandler.LoggedIn(user);
-
+            var token = HttpContext.Response.Headers.Get("access_token");
+            TempData["Token"] = token;
             return this.RedirectLocal(returnUrl);
         }
 
@@ -129,7 +133,6 @@ namespace Orchard.Users.Controllers {
             ViewData["PasswordLength"] = membershipSettings.GetMinimumPasswordLength();
 
             var shape = _orchardServices.New.Register();
-
             return new ShapeResult(this, shape);
         }
 

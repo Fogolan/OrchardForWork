@@ -1,9 +1,12 @@
-﻿@using TestApi.Models
-@{
+﻿@{
+    var token = TempData["Token"];
     Style.Require("TestApi.ShoppingCart");
     Script.Require("TestApi.ShoppingCart");
     Script.Require("TestApi.RefreshToken");
+    var tokenShape = New.TokenShape(Token: token);
 }
 <article class="shoppingcart">
     <div id="tableBlock"></div>
+    <br/>
+        @Display(tokenShape)
 </article>
