@@ -3,22 +3,26 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using TestApi.Middleware;
 using System;
+using System.Web;
 using System.Web.Helpers;
-using System.Web.Mvc;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Infrastructure;
-using Newtonsoft.Json.Linq;
+using Orchard.Mvc;
 using TestApi.Models;
 
 namespace TestApi.Services {
     public class AuthService : IAuthService {
         private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IOwinContext _owinContext;
 
-        public AuthService(IRefreshTokenService refreshTokenService) {
+        public AuthService(
+            IRefreshTokenService refreshTokenService,
+            IHttpContextAccessor httpContextAccessor) {
             _refreshTokenService = refreshTokenService;
+            _owinContext = httpContextAccessor.Current().GetOwinContext();
         }
 
-        public string GenerateLocalAccessTokenResponse(string login, IOwinContext owinContext) {
+        public string GenerateLocalAccessTokenResponse(string login) {
             var tokenExpiration = TimeSpan.FromSeconds(60);
 
             var identity = new ClaimsIdentity(OAuthDefaults.AuthenticationType);
@@ -33,7 +37,7 @@ namespace TestApi.Services {
 
             var ticket = new AuthenticationTicket(identity, props);
             var accessToken = AuthMiddleware.AuthBearerAuthenticationOptions.AccessTokenFormat.Protect(ticket);
-            var refreshToken = GenerateRefreshToken(owinContext, ticket, login, accessToken);
+            var refreshToken = GenerateRefreshToken(ticket, login, accessToken);
             var tokenResponse = new {
                 userName = login,
                 access_token = accessToken,
@@ -45,12 +49,12 @@ namespace TestApi.Services {
             };
             var token = Json.Encode(tokenResponse);
             
-            owinContext.Response.Context.Environment.Add("access_key", token);
+            _owinContext.Response.Context.Environment.Add("access_key", token);
             return token;
         }
 
-        public string GenerateRefreshToken(IOwinContext owinContext, AuthenticationTicket ticket, string userName, string accessToken) {
-            var context = new AuthenticationTokenCreateContext(owinContext, AuthMiddleware.AuthBearerAuthenticationOptions.AccessTokenFormat, ticket);
+        public string GenerateRefreshToken(AuthenticationTicket ticket, string userName, string accessToken) {
+            var context = new AuthenticationTokenCreateContext(_owinContext, AuthMiddleware.AuthBearerAuthenticationOptions.AccessTokenFormat, ticket);
             var token = new RefreshTokenRecord
             {
                 Token = accessToken,

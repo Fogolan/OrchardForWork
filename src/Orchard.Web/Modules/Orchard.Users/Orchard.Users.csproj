@@ -56,10 +56,6 @@
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -195,6 +191,10 @@
     <ProjectReference Include="..\Orchard.Workflows\Orchard.Workflows.csproj">
       <Project>{7059493c-8251-4764-9c1e-2368b8b485bc}</Project>
       <Name>Orchard.Workflows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestApi\TestApi.csproj">
+      <Project>{458ff026-9ef7-4567-9878-3ee3a1544e14}</Project>
+      <Name>TestApi</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

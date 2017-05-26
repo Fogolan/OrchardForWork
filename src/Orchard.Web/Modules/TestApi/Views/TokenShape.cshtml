@@ -1,5 +1,6 @@
 ﻿@{
     var token = Model.Token;
+    var isDeleteToken = Model.IsDeleteToken;
 }
 @if (!string.IsNullOrEmpty(token)) {
     <script>
@@ -7,4 +8,13 @@
         sessionStorage.setItem("tokenInfo", tokenString);
         console.log("getItem", sessionStorage.getItem("tokenInfo"));
     </script>
+}
+@if (isDeleteToken == true)
+{
+    <script>
+            var tokenKey = "tokenInfo";
+            if (sessionStorage.getItem(tokenKey) != null) {
+                    sessionStorage.removeItem(tokenKey);
+                }
+        </script>
 }

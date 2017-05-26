@@ -17,8 +17,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Orchard.Services;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using Orchard.Workflows.Helpers;
+using TestApi.Services;
 
 namespace Orchard.Users.Controllers
 {
@@ -30,6 +29,7 @@ namespace Orchard.Users.Controllers
         private readonly IOrchardServices _orchardServices;
         private readonly IUserEventHandler _userEventHandler;
         private readonly IClock _clock;
+        private readonly IAuthService _authService;
 
         public AccountController(
             IAuthenticationService authenticationService,
@@ -37,7 +37,8 @@ namespace Orchard.Users.Controllers
             IUserService userService,
             IOrchardServices orchardServices,
             IUserEventHandler userEventHandler,
-            IClock clock) {
+            IClock clock,
+            IAuthService authService) {
 
             _authenticationService = authenticationService;
             _membershipService = membershipService;
@@ -45,6 +46,7 @@ namespace Orchard.Users.Controllers
             _orchardServices = orchardServices;
             _userEventHandler = userEventHandler;
             _clock = clock;
+            _authService = authService;
 
             Logger = NullLogger.Instance;
             T = NullLocalizer.Instance;
@@ -106,8 +108,10 @@ namespace Orchard.Users.Controllers
             }
             _authenticationService.SignIn(user, rememberMe);
             _userEventHandler.LoggedIn(user);
-            var token = HttpContext.Response.Headers.Get("access_token");
-            TempData["Token"] = token;
+            if (user != null) {
+                var token = _authService.GenerateLocalAccessTokenResponse(user.UserName);
+                TempData["Token"] = token;
+            }
             return this.RedirectLocal(returnUrl);
         }
 
@@ -118,7 +122,7 @@ namespace Orchard.Users.Controllers
             if (loggedUser != null) {
                 _userEventHandler.LoggedOut(loggedUser);
             }
-
+            TempData["IsDeleteToken"] = true;
             return this.RedirectLocal(returnUrl);
         }
 
